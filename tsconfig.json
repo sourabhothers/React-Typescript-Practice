@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    // resolve path here & in vite.config.ts also
+    "baseUrl": "./",
+    "paths": {
+      "@public/*": ["./public/*"],
+      "@src/*": ["./src/*"],
+      "@components/*": ["./src/components/*"]
+    },
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "sourceMap": true, // Generate corresponding .map file
+    "declaration": true, // Generate corresponding .d.ts file
+    // "noUnusedLocals": true, // Report errors on unused locals
+    // "noUnusedParameters": true, // Report errors on unused parameters
+    "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["./src"]
+}

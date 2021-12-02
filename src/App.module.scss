@@ -1,0 +1,103 @@
+@import "@src/Styles/variables";
+
+.sectionCountAndDelete {
+  display: flex;
+  position: sticky;
+  top: 0;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.countDisplay {
+  width: 100%;
+  display: flex;
+  //
+  flex-direction: column;
+  height: 10rem;
+  background-color: $background-color-2;
+  row-gap: 10px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.inputButton {
+  width: max-content;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(46, 169, 226);
+  color: #fff;
+  font-weight: 600;
+}
+
+.form {
+  width: 100%;
+  text-align: center;
+  padding: 1rem 0;
+  background-color: $background-color-1;
+  margin: 10px 0;
+
+  .button {
+    padding: 5px 10px;
+    margin-left: 5px;
+    background-color: orangered;
+    border: none;
+    color: $text-color-white;
+    font-weight: 600;
+  }
+}
+
+.inputText {
+  padding: 6px 10px;
+  border: none;
+
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid $color-1;
+  }
+}
+
+.todoList {
+  list-style: none;
+  width: 100%;
+  border: 2px solid $background-color-1;
+  padding: 1rem;
+
+  & .todoItem {
+    min-width: max-content;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    // padding: 5px 10px;
+    border: 2px solid $color-warning;
+    //
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    // & > *:not(:first-child) {
+    //   margin-left: 5em;
+    // }
+
+    & .leftColorBox {
+      background-color: $color-warning;
+      width: 2rem;
+      height: 2rem;
+      display: block;
+    }
+
+    & .todoItemText {
+      color: $text-color-todo;
+      font-size: 1.3rem;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    & .deleteButton {
+      background-color: red;
+      padding: 5px;
+    }
+  }
+}

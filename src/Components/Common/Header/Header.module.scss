@@ -1,0 +1,12 @@
+@import "@src/Styles/variables";
+
+.header {
+  width: 100%;
+  font-size: 2rem;
+  color: $header-text-color;
+  background-color: $header-background-color;
+  text-align: center;
+  font-weight: 600;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 1rem 0;
+}
