@@ -1,1 +1,3 @@
-export const generateId = () => Math.floor(Math.random() * 100000).toString()
+import {nanoid} from 'nanoid'
+
+export const generateId = () => nanoid(6)

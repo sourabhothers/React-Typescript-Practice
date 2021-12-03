@@ -42,8 +42,8 @@ const TodoProvider: FC = ({ children }) => {
     })
   }
 
-  const deleteTodoItemsByState = (id: "completed" | "pending") => {
-    setTodoList(pState => pState.filter(todo => todo.state !== id))
+  const deleteTodoItemsByState = (state: "completed" | "pending") => {
+    setTodoList(pState => pState.filter(todo => todo.state !== state))
   }
 
   const deleteAllTodoItems = () => { setTodoList(() => []) }
