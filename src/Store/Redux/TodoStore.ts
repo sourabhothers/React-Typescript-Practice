@@ -1,8 +1,7 @@
 import { ITodoList } from "@src/App";
 import { generateId } from "@src/Helpers";
-import { createStore, Reducer } from "redux";
-import { TodoDefaultState } from "../Contexts/todo-context";
-import deepClone from "deep-clone";
+
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ITodoDefaultState {
   isLoggedIn: boolean;
@@ -13,23 +12,7 @@ export interface ITodoDefaultState {
   totalCount: number;
 }
 
-type ITodoReducerActionTypes =
-  | "addNewTaskToList"
-  | "toggleTodoItemState"
-  | "deleteTodoItemsByState"
-  | "deleteAllTodoItems"
-  | "deleteTodoItemById"
-  | "updateTotalCount"
-  | "updatePendingCount"
-  | "updateCompletedCount"
-  | "setEntireTodoList";
-
-export interface ITodoReducerAction {
-  type: ITodoReducerActionTypes;
-  payload: unknown;
-}
-
-const todoReducerDefaultState: ITodoDefaultState = {
+const initialState: ITodoDefaultState = {
   todoList: [],
   isLoggedIn: false,
   lastAccessedTime: 0,
@@ -38,45 +21,48 @@ const todoReducerDefaultState: ITodoDefaultState = {
   totalCount: 0,
 };
 
-const TodoReducer: Reducer<ITodoDefaultState, ITodoReducerAction> = (
-  state = TodoDefaultState,
-  action
-) => {
-  switch (action.type) {
-    // New CASE
-    case "setEntireTodoList":
-      const entireTodoList = action.payload as (ITodoList & { _id: string })[];
-      return { ...state, todoList: entireTodoList };
-    // New CASE
-    case "addNewTaskToList":
+const todoSlice = createSlice({
+  name: "todo",
+  initialState,
+  reducers: {
+    addNewTaskToTodoList: (state, action: PayloadAction<string>) => {
       const newTodoTaskText = action.payload as string;
       const newTodoItemBuilt = {
         _id: generateId(),
         content: newTodoTaskText,
         state: "pending",
       } as ITodoList & { _id: string };
-      const newTodoList = [...state.todoList, newTodoItemBuilt];
-      return { ...state, todoList: newTodoList };
-    // New CASE
-    case "deleteAllTodoItems":
-      return { ...state, todoList: [] };
-    // New CASE
-    case "deleteTodoItemById":
-      const _id = action.payload as string;
+      // const newTodoList = [...state.todoList, newTodoItemBuilt];
+      state.todoList.push(newTodoItemBuilt);
+    },
+    setEntireTodoList: (
+      state,
+      action: PayloadAction<(ITodoList & { _id: string })[]>
+    ) => {
+      state.todoList = action.payload;
+    },
+    deleteAllTodoItems: (state) => {
+      state.todoList = [];
+    },
+    deleteTodoItemById: (state, action: PayloadAction<string>) => {
+      const _id = action.payload;
       const newTodoIdFilter = state.todoList.filter(
         (todoF) => todoF._id !== _id
       );
-      return { ...state, todoList: newTodoIdFilter };
-    // New CASE
-    case "deleteTodoItemsByState":
-      const status = action.payload as "completed" | "pending";
+      state.todoList = newTodoIdFilter;
+    },
+    deleteTodoItemsByState: (
+      state,
+      action: PayloadAction<"completed" | "pending">
+    ) => {
+      const status = action.payload;
       const newTodoStateFilter = state.todoList.filter(
         (todo) => todo.state !== status
       );
-      return { ...state, todoList: newTodoStateFilter };
-    // New CASE
-    case "toggleTodoItemState":
-      const _clickedId = action.payload as string;
+      state.todoList = newTodoStateFilter;
+    },
+    toggleTodoItemState: (state, action: PayloadAction<string>) => {
+      const _clickedId = action.payload;
       // find todo item index
       const foundIndex = state.todoList.findIndex(
         (todoF) => todoF._id === _clickedId
@@ -90,26 +76,32 @@ const TodoReducer: Reducer<ITodoDefaultState, ITodoReducerAction> = (
             ? "pending"
             : "completed",
       };
-      return { ...state, todoList: _newTodoList };
-    // New CASE
-    case "updateCompletedCount":
-      const completedCount = action.payload as number;
-      return { ...state, completedCount };
-    // New CASE
-    case "updatePendingCount":
-      const pendingCount = action.payload as number;
-      return { ...state, pendingCount };
-    // New CASE
-    case "updateTotalCount":
-      const totalCount = action.payload as number;
-      return { ...state, totalCount };
-    default:
-      return state;
-  }
-};
+      state.todoList = _newTodoList;
+    },
+    updateCompletedCount: (state, action: PayloadAction<number>) => {
+      state.completedCount = action.payload;
+    },
+    updatePendingCount: (state, action: PayloadAction<number>) => {
+      state.pendingCount = action.payload;
+    },
+    updateTotalCount: (state, action: PayloadAction<number>) => {
+      state.totalCount = action.payload;
+    },
+  },
+});
 
-const TodoStore = createStore(TodoReducer);
+export const todoActions = todoSlice.actions;
 
-export type ITodoStoreDispatch = typeof TodoStore.dispatch;
+const store = configureStore({
+  reducer: {
+    todo: todoSlice.reducer,
+  },
+  devTools: false,
+});
 
-export default TodoStore;
+export type ITodoRootState = ReturnType<typeof store.getState>;
+export type IAppDispatch = typeof store.dispatch;
+
+export const todoSelector = (state: ITodoRootState) => state.todo;
+
+export default store;
